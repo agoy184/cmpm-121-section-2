@@ -2,34 +2,36 @@
 
 import './style.css'
 
-const dino = document.getElementById("dino")
-const cactus = document.getElementById("cactus")
-const bird = document.getElementById("bird")
+const dino = document.getElementById("dino");
+const cactus = document.getElementById("cactus");
+const bird = document.getElementById("bird");
 
-const scoreText = document.getElementById("scoreText")
-let score = 0
-SetText("click to start!")
+const scoreText = document.getElementById("scoreText");
+let score = 0;
+setText("click to start!");
 
 
-var isJumping = false
-let gameOver = true
+let isJumping = false;
+let gameOver = true;
 
 // Fixes charging jump bug
-//document.addEventListener('click', () => jump())
-document.addEventListener('mousedown', () => jump())
+//document.addEventListener('click', () => jump());
+document.addEventListener('mousedown', () => jump());
 
+requestAnimationFrame(main);
+//setInterval(function () { main()}, 10)
 
-setInterval(function () { Main()}, 10)
-
-function Main()
+function main()
 {
     if(gameOver == false)
     {
-        score = score + 1;
-        SetText("Score: " + score)
-
-        CheckGameOver()
+        score += 1;
+        setText("Score: " + score);
+        
+        checkGameOver();
     }
+    requestAnimationFrame(main);
+
 }
 
 
@@ -39,89 +41,86 @@ function jump()
     {
         if(isJumping == false)
         {
-            isJumping = true
-            dino?.classList.add("jump")
-            setTimeout(RemoveJump, 500)
+            isJumping = true;
+            dino?.classList.add("jump");
+            setTimeout(removeJump, 500);
         }
     }
     else
     {
-        StartGame();
+        startGame();
     }
     
 }
 
-
-function RemoveJump()
+function removeJump()
 {
-    dino?.classList.remove("jump")
+    dino?.classList.remove("jump");
     isJumping = false;
     //mainLoop = mainLoop //bug fix?
 }
 
-function RemoveObstacles()
+function removeObstacles()
 {
-    cactus?.classList.remove("cactusMove")
-    bird?.classList.remove("birdMove")
+    cactus?.classList.remove("cactusMove");
+    bird?.classList.remove("birdMove");
 }
 
-function getChecker(dino: HTMLElement, value: string){
-    return parseInt(window.getComputedStyle(dino).getPropertyValue(value));
+function getChecker(elem: HTMLElement, value: string)
+{
+    return parseInt(window.getComputedStyle(elem).getPropertyValue(value));
 }
 
-function CheckGameOver()
+function checkGameOver()
 {
-
     if(gameOver == false && dino != null && cactus != null && bird != null)
     {
         //get is dinosaur jumping
-        //let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"))
-        let dinoTop = getChecker(dino, "top")
+        //const dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
+        const dinoTop = getChecker(dino, "top");
 
         //get cactus position
-        //let cactusleft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"))
-        let cactusleft = getChecker(cactus, "left")
+        //let cactusleft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
+        const cactusleft = getChecker(cactus, "left");
 
         //get bird position
-        //let birdleft = parseInt(window.getComputedStyle(bird).getPropertyValue("left"))
-        let birdleft = getChecker(bird, "left")
+        //let birdleft = parseInt(window.getComputedStyle(bird).getPropertyValue("left"));
+        const birdleft = getChecker(bird, "left");
 
-        getChecker(dino, "top")
-        getChecker(dino, "top")
         //detect cactus collision
-        if(dinoTop >= 150 && Math.abs(cactusleft) < 7)
+        if(dinoTop >= 150 && Math.abs(cactusleft) < 7 || dinoTop <= 55 && Math.abs(birdleft) < 11)
         {
             //end game
-            console.log("player died!")
-            SetText("Final Score: " + score + "! Click To Play Again!")
-            gameOver = true
+            console.log("player died!");
+            setText("Final Score: " + score + "! Click To Play Again!");
+            gameOver = true;
 
             //reset player
-            RemoveJump()
+            removeJump();
             
             //reset cactus
-            RemoveObstacles()
+            removeObstacles();
         }
 
-        //detect bird collision
-        if(dinoTop <= 55 && Math.abs(birdleft) < 11)
+        // old implementation where we check bird collision seperately, now it's an or statement
+        /*if(dinoTop <= 55 && Math.abs(birdleft) < 11)
         {
             //end game
-            console.log("player died!")
-            SetText("Final Score: " + score + "! Click To Play Again!")
-            gameOver = true
+            console.log("player died!");
+            setText("Final Score: " + score + "! Click To Play Again!");
+            gameOver = true;
 
             //reset player
-            RemoveJump()
+            removeJump();
             
             //reset cactus
-            RemoveObstacles()
-        }
+            removeObstacles();
+        }*/
     }
 }
 
 
-function StartGame()
+function startGame()
 {
     console.log("Game started!")
     gameOver = false
@@ -130,7 +129,7 @@ function StartGame()
     bird?.classList.add("birdMove")
 }
 
-function SetText(s: string)
+function setText(s: string)
 {
     if(scoreText)
     {
