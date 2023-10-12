@@ -23,12 +23,12 @@ requestAnimationFrame(main);
 
 function main()
 {
+    checkGameOver();
     if(gameOver == false)
     {
         score += 1;
         setText("Score: " + score);
         
-        checkGameOver();
     }
     requestAnimationFrame(main);
 
