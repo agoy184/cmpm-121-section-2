@@ -14,7 +14,9 @@ SetText("click to start!")
 var isJumping = false
 let gameOver = true
 
-document.addEventListener('click', () => jump())
+// Fixes charging jump bug
+//document.addEventListener('click', () => jump())
+document.addEventListener('mousedown', () => jump())
 
 
 setInterval(function () { Main()}, 10)
@@ -63,6 +65,9 @@ function RemoveObstacles()
     bird?.classList.remove("birdMove")
 }
 
+function getChecker(dino: HTMLElement, value: string){
+    return parseInt(window.getComputedStyle(dino).getPropertyValue(value));
+}
 
 function CheckGameOver()
 {
@@ -70,14 +75,19 @@ function CheckGameOver()
     if(gameOver == false && dino != null && cactus != null && bird != null)
     {
         //get is dinosaur jumping
-        let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"))
+        //let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"))
+        let dinoTop = getChecker(dino, "top")
 
         //get cactus position
-        let cactusleft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"))
+        //let cactusleft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"))
+        let cactusleft = getChecker(cactus, "left")
 
         //get bird position
-        let birdleft = parseInt(window.getComputedStyle(bird).getPropertyValue("left"))
+        //let birdleft = parseInt(window.getComputedStyle(bird).getPropertyValue("left"))
+        let birdleft = getChecker(bird, "left")
 
+        getChecker(dino, "top")
+        getChecker(dino, "top")
         //detect cactus collision
         if(dinoTop >= 150 && Math.abs(cactusleft) < 7)
         {
